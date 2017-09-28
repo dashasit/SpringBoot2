@@ -1,0 +1,31 @@
+<Configuration>
+	<Properties>
+		<Property name="application_name">generic</Property>
+		<Property name="log_directory">${env:INTELLIGRATED_LOGS}/wes/${application_name}/logs</Property>
+		<Property name="log_file_name">${application_name}.log</Property>
+		<Property name="logging_pattern">%d{yy-MM-dd HH:mm:ss.SSS} %-5level [%t] %c{1.1}.%M(%F:%L) - %msg%n</Property>
+	</Properties>
+	<Appenders>
+		<Console name="console_appender" target="SYSTEM_OUT">
+			<PatternLayout pattern="${logging_pattern}" />
+		</Console>
+		<RollingFile name="rolling_file_appender"
+					 fileName="${log_directory}/${log_file_name}"
+					 filePattern="${log_directory}/rolled/${application_name}-%d{yyyy-MM-dd}.log">
+			<PatternLayout pattern="${logging_pattern}" />
+			<Policies>
+				<TimeBasedTriggeringPolicy  interval="10" />
+				<SizeBasedTriggeringPolicy size="10000 KB"/>
+			</Policies>
+		</RollingFile>
+	</Appenders>
+	<Loggers>
+		<Root level="INFO">
+			<AppenderRef ref="console_appender"/>
+		</Root>
+		<Logger name="com.intelligrated.generic" level="INFO">
+			<AppenderRef ref="console_appender"/>
+			<AppenderRef ref="rolling_file_appender"/>
+		</Logger>
+	</Loggers>
+</Configuration>
